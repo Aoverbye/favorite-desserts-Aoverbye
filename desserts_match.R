@@ -1,8 +1,7 @@
 library(tidyverse)
 library(here)
-read_csv(here("data","favorite_desserts.csv"))
-library(tidyverse)
-library(rvest)  # used to scrape website content
+favorite_desserts <- read_csv(here("data","favorite_desserts.csv"))
+ # used to scrape website content
 
 # Check if that data folder exists and creates it if not
 dir.create("data", showWarnings = FALSE)
@@ -19,3 +18,10 @@ dessert_listing <- dessert_elements %>%
   head(.,-3) %>%               # 3 last ones were not desserts
   rowid_to_column("rank") %>%  # adding a column using the row number as a proxy for the rank
   write_csv("data/iconic_desserts.csv") # save it as csv
+
+dessert_listing$dessert<-tolower(dessert_listing$dessert)
+
+favorite_desserts$Favorite_dessert<-tolower(favorite_desserts$Favorite_dessert)
+
+
+dessert_match <- inner_join(dessert_listing, favorite_desserts, by = join_by(dessert == Favorite_dessert))
